@@ -5,7 +5,7 @@ import json
 
 class Network():
     def __init__(self):
-        pass
+        self.nodes_dict = dict()
 
 
 class Node():
@@ -16,3 +16,7 @@ class Node():
 class Link():
     def __init__(self):
         pass
+
+
+if __name__ == "__main__":
+    pass
