@@ -33,10 +33,30 @@ class Network():
         self.tiers_dict[tier].add(node_id)
         self.tier_nodes_set.add(node_id)
 
+    def get_neighbours_of_node(self, node_id):
+        neighbours_set = set()
+        for link_id in self.links_dict:
+            if self.links_dict[link_id].source == node_id:
+                neighbours_set.add(self.links_dict[link_id].target)
+            elif self.links_dict[link_id].target == node_id:
+                neighbours_set.add(self.links_dict[link_id].source)
+        return neighbours_set
+
     def get_nodes_in_tier(self, tier):
-        if tier in self.tiers_dict:
-            return self.tiers_dict[tier]
-        return set()
+        if not 0 in self.tiers_dict:
+            return set()  # If not even tier 0 is filled we can skip this shit and go home.
+
+        for i in range(tier):
+            if i+1 in self.tiers_dict:
+                continue  # The next tier already exists? Fine.
+            # Next tier does not exist, so we'll create it.
+            tier_set = set()
+            for node_id in self.tiers_dict[i]:  # Iterate over all nodes in the current tier.
+                tier_set.union(self.get_neighbours_of_node(node_id)) # Add all neighbours of this node to the set for the next tier.
+            tier_set = tier_set.difference(self.tier_nodes_set)  # Remove all node_ids that are already part of a tier.
+            self.tiers_dict[i+1] = tier_set
+
+        return self.tiers_dict[tier]
 
 
 class Node():
@@ -78,8 +98,6 @@ if __name__ == "__main__":
             node_obj = Node(node)
             net.add_node(node_obj)
 
-    print(net.get_nodes_in_tier(0))
-
     with open(args.graphJSON, 'r') as f:
         graph_json = json.load(f)
         node_id_list = []
@@ -91,3 +109,5 @@ if __name__ == "__main__":
                               link['vpn'],
                               link['tq'],
                               link['bidirect']))
+
+    print(net.get_nodes_in_tier(1))
