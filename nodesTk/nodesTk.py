@@ -85,20 +85,16 @@ class Link():
     def tq_percent(self):
         return 1/self.tq
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('nodesJSON')
-    parser.add_argument('graphJSON')
-    args = parser.parse_args()
 
+def main(nodes_json_path, graph_json_path):
     net = Network()
-    with open(args.nodesJSON, 'r') as f:
+    with open(nodes_json_path, 'r') as f:
         nodes_json = json.load(f)
         for node in nodes_json['nodes']:
             node_obj = Node(node)
             net.add_node(node_obj)
 
-    with open(args.graphJSON, 'r') as f:
+    with open(graph_json_path, 'r') as f:
         graph_json = json.load(f)
         node_id_list = []
         for node in graph_json['batadv']['nodes']:
@@ -111,3 +107,12 @@ if __name__ == "__main__":
                               link['bidirect']))
 
     print(net.get_nodes_in_tier(1))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('nodesJSON')
+    parser.add_argument('graphJSON')
+    args = parser.parse_args()
+
+    main(args.nodesJSON, args.graphJSON)
