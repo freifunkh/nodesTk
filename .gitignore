@@ -1,5 +1,7 @@
 ### Project based devices
 *.json
+!tests/nodes.json
+!tests/graph.json
 
 ### Python template
 # Byte-compiled / optimized / DLL files

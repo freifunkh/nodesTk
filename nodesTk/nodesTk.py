@@ -86,7 +86,7 @@ class Link():
         return 1/self.tq
 
 
-def main(nodes_json_path, graph_json_path):
+def generate_from_files(nodes_json_path, graph_json_path):
     net = Network()
     with open(nodes_json_path, 'r') as f:
         nodes_json = json.load(f)
@@ -105,6 +105,11 @@ def main(nodes_json_path, graph_json_path):
                               link['vpn'],
                               link['tq'],
                               link['bidirect']))
+    return net
+
+
+def main(nodes_json_path, graph_json_path):
+    net = generate_from_files(nodes_json_path, graph_json_path)
 
     print(net.get_nodes_in_tier(1))
 
