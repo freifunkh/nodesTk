@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import argparse
 import json
 
 
@@ -43,6 +44,9 @@ class Node():
     def is_gateway(self):
         return self.json['flags']['gateway']
 
+    def is_online(self):
+            return self.json['flags']['online']
+
 
 class Link():
     def __init__(self, source, target, vpn, tq, bidirect):
@@ -54,8 +58,13 @@ class Link():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('nodesJSON')
+    parser.add_argument('graphJSON')
+    args = parser.parse_args()
+
     net = Network()
-    with open("../nodes.json", 'r') as f:
+    with open(args.nodesJSON, 'r') as f:
         nodes_json = json.load(f)
         for node in nodes_json['nodes']:
             node_obj = Node(node)
@@ -63,7 +72,7 @@ if __name__ == "__main__":
 
     print(net.get_nodes_in_tier(0))
 
-    with open("../graph.json", 'r') as f:
+    with open(args.graphJSON, 'r') as f:
         graph_json = json.load(f)
         node_id_list = []
         for node in graph_json['batadv']['nodes']:
