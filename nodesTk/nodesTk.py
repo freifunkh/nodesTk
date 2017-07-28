@@ -11,3 +11,8 @@ class Network():
 class Node():
     def __init__(self):
         pass
+
+
+class Link():
+    def __init__(self):
+        pass
