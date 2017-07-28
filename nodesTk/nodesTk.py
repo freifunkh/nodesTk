@@ -52,9 +52,10 @@ class Network():
             # Next tier does not exist, so we'll create it.
             tier_set = set()
             for node_id in self.tiers_dict[i]:  # Iterate over all nodes in the current tier.
-                tier_set.union(self.get_neighbours_of_node(node_id)) # Add all neighbours of this node to the set for the next tier.
+                tier_set = tier_set.union(self.get_neighbours_of_node(node_id)) # Add all neighbours of this node to the set for the next tier.
             tier_set = tier_set.difference(self.tier_nodes_set)  # Remove all node_ids that are already part of a tier.
             self.tiers_dict[i+1] = tier_set
+            self.tier_nodes_set = self.tier_nodes_set.union(tier_set)
 
         return self.tiers_dict[tier]
 
