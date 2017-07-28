@@ -5,9 +5,10 @@ import json
 
 class Network():
     def __init__(self):
-        self.nodes_dict = dict() # node_id as key and Node obj as value
-        self.tiers_dict = dict() # tier number as key and set of node_id as value
-        self.tier_nodes_set = set() # a set of all node_id who already have a tier
+        self.nodes_dict = dict()  # node_id as key and Node obj as value
+        self.links_dict = dict()  # node_ids alphabetically concatenated as key and Link obj as value
+        self.tiers_dict = dict()  # tier number as key and set of node_id as value
+        self.tier_nodes_set = set()  # a set of all node_id who already have a tier
 
     def add_node(self, node):
         node_id = node.get_node_id()
@@ -44,16 +45,28 @@ class Node():
 
 
 class Link():
-    def __init__(self):
-        pass
+    def __init__(self, source, target, vpn, tq, bidirect):
+        self.source = source
+        self.target = target
+        self.vpn = vpn
+        self.tq = tq
+        self.bidirect = bidirect
 
 
 if __name__ == "__main__":
     net = Network()
-    with open("nodes.json", 'r') as f:
+    with open("../nodes.json", 'r') as f:
         nodes_json = json.load(f)
         for node in nodes_json['nodes']:
             node_obj = Node(node)
             net.add_node(node_obj)
 
     print(net.get_nodes_in_tier(0))
+
+    with open("../graph.json", 'r') as f:
+        graph_json = json.load(f)
+        node_id_list = []
+        for node in graph_json['batadv']['nodes']:
+            node_id_list.append(node['node_id'])
+        for link in graph_json['batadv']['links']:
+            Link(node_id_list[link['source']], node_id_list[link['target']], link['vpn'], link['tq'], link['bidirect'])
