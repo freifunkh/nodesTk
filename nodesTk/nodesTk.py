@@ -11,6 +11,11 @@ class Network():
         self.tiers_dict = dict()  # tier number as key and set of node_id as value
         self.tier_nodes_set = set()  # a set of all node_id who already have a tier
 
+    def add_link(self, newlink):
+        l = [newlink.source, newlink.target]
+        l.sort(key=str.lower)
+        self.links_dict["-".join(l)] = newlink  # now with 'Streckenstrich'(tm)
+
     def add_node(self, node):
         node_id = node.get_node_id()
         self.nodes_dict[node_id] = node
@@ -78,4 +83,8 @@ if __name__ == "__main__":
         for node in graph_json['batadv']['nodes']:
             node_id_list.append(node['node_id'])
         for link in graph_json['batadv']['links']:
-            Link(node_id_list[link['source']], node_id_list[link['target']], link['vpn'], link['tq'], link['bidirect'])
+            net.add_link(Link(node_id_list[link['source']],
+                              node_id_list[link['target']],
+                              link['vpn'],
+                              link['tq'],
+                              link['bidirect']))
