@@ -18,7 +18,7 @@ class Network():
             self.add_node_to_tier(node_id, 0)
 
     def get_node(self, node_id):
-        return self.nodes_dict(node_id)
+        return self.nodes_dict[node_id]
 
     def add_node_to_tier(self, node_id, tier):
         if node_id in self.tier_nodes_set:
