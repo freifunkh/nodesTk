@@ -7,11 +7,19 @@ class Network():
     def __init__(self):
         self.nodes_dict = dict()
 
+    def add_node(self, node):
+        node_id = node['nodeinfo']['node_id']
+        self.nodes_dict[node_id] = node
+
 
 class Node():
-    def __init__(self):
-        pass
+    def __init__(self, json):
+        self.json = json
 
 
 if __name__ == "__main__":
-    pass
+    with open("nodes.json", 'r') as f:
+        nodes_json = json.load(f)
+        for node in nodes_json['nodes']:
+            node_obj = Node(node)
+            
