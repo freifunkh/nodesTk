@@ -61,6 +61,9 @@ class Link():
         self.tq = tq
         self.bidirect = bidirect
 
+    @property
+    def tq_percent(self):
+        return 1/self.tq
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
