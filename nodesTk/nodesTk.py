@@ -2,7 +2,7 @@
 
 import argparse
 import json
-import datetime
+
 
 class Network():
     def __init__(self):
@@ -116,15 +116,7 @@ def generate_from_files(nodes_json_path, graph_json_path):
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
 
-    print(datetime.datetime.now())
     print(net.get_neighbours_of_node('30b5c281433e'))
-    print(datetime.datetime.now())
-    print(net.get_neighbours_of_node('30b5c281433e'))
-    print(datetime.datetime.now())
-    print(net.get_neighbours_of_node('30b5c281433e'))
-    print(datetime.datetime.now())
-    print(net.get_neighbours_of_node('30b5c281433e'))
-    print(datetime.datetime.now())
 
 
 if __name__ == "__main__":
