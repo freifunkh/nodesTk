@@ -2,7 +2,7 @@
 
 import argparse
 import json
-
+import datetime
 
 class Network():
     def __init__(self):
@@ -34,12 +34,15 @@ class Network():
         self.tier_nodes_set.add(node_id)
 
     def get_neighbours_of_node(self, node_id):
+        if self.nodes_dict[node_id].neighbours_set:
+            return self.nodes_dict[node_id].neighbours_set
         neighbours_set = set()
         for link_id in self.links_dict:
             if self.links_dict[link_id].source == node_id:
                 neighbours_set.add(self.links_dict[link_id].target)
             elif self.links_dict[link_id].target == node_id:
                 neighbours_set.add(self.links_dict[link_id].source)
+        self.nodes_dict[node_id].neighbours_set = neighbours_set
         return neighbours_set
 
     def get_nodes_in_tier(self, tier):
@@ -63,6 +66,7 @@ class Network():
 class Node():
     def __init__(self, json):
         self.json = json
+        self.neighbours_set = None
 
     def get_node_id(self):
         return self.json['nodeinfo']['node_id']
@@ -112,7 +116,15 @@ def generate_from_files(nodes_json_path, graph_json_path):
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
 
-    print(net.get_nodes_in_tier(1))
+    print(datetime.datetime.now())
+    print(net.get_neighbours_of_node('30b5c281433e'))
+    print(datetime.datetime.now())
+    print(net.get_neighbours_of_node('30b5c281433e'))
+    print(datetime.datetime.now())
+    print(net.get_neighbours_of_node('30b5c281433e'))
+    print(datetime.datetime.now())
+    print(net.get_neighbours_of_node('30b5c281433e'))
+    print(datetime.datetime.now())
 
 
 if __name__ == "__main__":
