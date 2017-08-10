@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import unittest
-
+import sys
+from io import StringIO
 import nodesTk
 
 
@@ -36,6 +37,14 @@ class NodesTKTestCase(unittest.TestCase):
 
     def test_node_online(self):
         assert self.net.get_node("62d703f9b069").is_online()
+
+    @staticmethod
+    def test_main():
+        captured_output = StringIO()
+        sys.stdout = captured_output  # redirect stdout
+        nodesTk.main("nodes.json", "graph.json")
+        sys.stdout = sys.__stdout__  # reset redirect
+        assert captured_output.getvalue().startswith("{'6466b3b0256e'}\n{'6466b3b0256e', '9e9203c5c897'}\n")
 
 
 if __name__ == '__main__':
