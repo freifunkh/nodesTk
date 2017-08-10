@@ -33,17 +33,27 @@ class Network():
         self.tiers_dict[tier].add(node_id)
         self.tier_nodes_set.add(node_id)
 
-    def get_neighbours_of_node(self, node_id):
-        if self.nodes_dict[node_id].neighbours_set:
-            return self.nodes_dict[node_id].neighbours_set
-        neighbours_set = set()
-        for link_id in self.links_dict:
-            if self.links_dict[link_id].source == node_id:
-                neighbours_set.add(self.links_dict[link_id].target)
-            elif self.links_dict[link_id].target == node_id:
-                neighbours_set.add(self.links_dict[link_id].source)
-        self.nodes_dict[node_id].neighbours_set = neighbours_set
-        return neighbours_set
+    def get_neighbours_of_node(self, node_id, vpn_neighbours=False):
+        if not self.nodes_dict[node_id].mesh_neighbours_set or not self.nodes_dict[node_id].vpn_neighbours_set:
+            self.nodes_dict[node_id].mesh_neighbours_set = set()
+            self.nodes_dict[node_id].vpn_neighbours_set = set()
+            for link_id in self.links_dict:
+                other_node_id = None
+                if self.links_dict[link_id].source == node_id:
+                    other_node_id = self.links_dict[link_id].target
+                elif self.links_dict[link_id].target == node_id:
+                    other_node_id = self.links_dict[link_id].source
+
+                if other_node_id:
+                    if self.links_dict[link_id].vpn:
+                        self.nodes_dict[node_id].vpn_neighbours_set.add(other_node_id)
+                    else:
+                        self.nodes_dict[node_id].mesh_neighbours_set.add(other_node_id)
+
+        if vpn_neighbours:
+            return self.nodes_dict[node_id].mesh_neighbours_set.union(self.nodes_dict[node_id].vpn_neighbours_set)
+        else:
+            return self.nodes_dict[node_id].mesh_neighbours_set
 
     def get_nodes_in_tier(self, tier):
         if not 0 in self.tiers_dict:
@@ -66,7 +76,8 @@ class Network():
 class Node():
     def __init__(self, json):
         self.json = json
-        self.neighbours_set = None
+        self.mesh_neighbours_set = None
+        self.vpn_neighbours_set = None
 
     def get_node_id(self):
         return self.json['nodeinfo']['node_id']
@@ -116,8 +127,8 @@ def generate_from_files(nodes_json_path, graph_json_path):
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
 
-    print(net.get_neighbours_of_node('30b5c281433e'))
-
+    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
+    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

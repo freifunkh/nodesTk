@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import unittest
 
 from nodesTk import nodesTk
@@ -25,6 +27,11 @@ class NodesTKTestCase(unittest.TestCase):
     def test_tq_property(self):
         l = nodesTk.Link("a", "b", True, 1.337, False)
         assert abs(l.tq_percent-0.7479431563201197) < 0.0001
+
+    def test_get_neighbours(self):
+        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False) == set(["6466b3b0256e"])
+        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True)  == set(["6466b3b0256e", "9e9203c5c897"])
+
 
 if __name__ == '__main__':
     unittest.main()
