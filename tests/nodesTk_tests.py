@@ -2,7 +2,7 @@
 
 import unittest
 
-from nodesTk import nodesTk
+import nodesTk
 
 
 class NodesTKTestCase(unittest.TestCase):
