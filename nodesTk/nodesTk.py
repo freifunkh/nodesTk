@@ -75,8 +75,8 @@ class Network:
 
 
 class Node:
-    def __init__(self, json):
-        self.json = json
+    def __init__(self, json_representation):
+        self.json = json_representation
         self.mesh_neighbours_set = None
         self.vpn_neighbours_set = None
 
