@@ -32,6 +32,9 @@ class NodesTKTestCase(unittest.TestCase):
         assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False) == {"6466b3b0256e"}
         assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True) == {"6466b3b0256e", "9e9203c5c897"}
 
+    def test_node_online(self):
+        assert self.net.get_node("62d703f9b069").is_online()
+
 
 if __name__ == '__main__':
     unittest.main()

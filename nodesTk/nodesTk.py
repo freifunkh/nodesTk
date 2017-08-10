@@ -80,6 +80,8 @@ class Node:
         self.mesh_neighbours_set = None
         self.vpn_neighbours_set = None
 
+    # fixme properties are more pythonic than getter
+    # https://stackoverflow.com/questions/6618002/python-property-versus-getters-and-setters
     def get_node_id(self):
         return self.json['nodeinfo']['node_id']
 
