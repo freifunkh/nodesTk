@@ -29,8 +29,8 @@ class NodesTKTestCase(unittest.TestCase):
         assert abs(l.tq_percent-0.7479431563201197) < 0.0001
 
     def test_get_neighbours(self):
-        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False) == set(["6466b3b0256e"])
-        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True) == set(["6466b3b0256e", "9e9203c5c897"])
+        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False) == {"6466b3b0256e"}
+        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True) == {"6466b3b0256e", "9e9203c5c897"}
 
 
 if __name__ == '__main__':
