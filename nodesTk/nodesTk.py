@@ -4,7 +4,7 @@ import argparse
 import json
 
 
-class Network():
+class Network:
     def __init__(self):
         self.nodes_dict = dict()  # node_id as key and Node obj as value
         self.links_dict = dict()  # node_ids alphabetically concatenated as key and Link obj as value
@@ -28,7 +28,7 @@ class Network():
     def add_node_to_tier(self, node_id, tier):
         if node_id in self.tier_nodes_set:
             return
-        if not tier in self.tiers_dict:
+        if tier not in self.tiers_dict:
             self.tiers_dict[tier] = set()
         self.tiers_dict[tier].add(node_id)
         self.tier_nodes_set.add(node_id)
@@ -56,7 +56,7 @@ class Network():
             return self.nodes_dict[node_id].mesh_neighbours_set
 
     def get_nodes_in_tier(self, tier):
-        if not 0 in self.tiers_dict:
+        if 0 not in self.tiers_dict:
             return set()  # If not even tier 0 is filled we can skip this shit and go home.
 
         for i in range(tier):
@@ -73,7 +73,7 @@ class Network():
         return self.tiers_dict[tier]
 
 
-class Node():
+class Node:
     def __init__(self, json):
         self.json = json
         self.mesh_neighbours_set = None
