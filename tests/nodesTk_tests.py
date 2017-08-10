@@ -30,7 +30,7 @@ class NodesTKTestCase(unittest.TestCase):
 
     def test_get_neighbours(self):
         assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False) == set(["6466b3b0256e"])
-        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True)  == set(["6466b3b0256e", "9e9203c5c897"])
+        assert self.net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True) == set(["6466b3b0256e", "9e9203c5c897"])
 
 
 if __name__ == '__main__':
