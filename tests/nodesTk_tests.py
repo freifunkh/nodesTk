@@ -18,13 +18,15 @@ class NodesTKTestCase(unittest.TestCase):
     def test_uplinkamount(self):
         assert 480 == len(self.net.get_nodes_in_tier(1))
 
-    def test_addlink_naming(self):
+    @staticmethod
+    def test_addlink_naming():
         l = nodesTk.Link("62d703f9b069", "18a6f72b7c36", True, 1, False)
         new_net = nodesTk.Network()
         new_net.add_link(l)
         assert list(new_net.links_dict.keys())[0] == "18a6f72b7c36-62d703f9b069"
 
-    def test_tq_property(self):
+    @staticmethod
+    def test_tq_property():
         l = nodesTk.Link("a", "b", True, 1.337, False)
         assert abs(l.tq_percent-0.7479431563201197) < 0.0001
 
