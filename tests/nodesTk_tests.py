@@ -80,6 +80,13 @@ class NodesTKTestCase(unittest.TestCase):
         sys.stdout = sys.__stdout__  # reset redirect
         assert captured_output.getvalue().startswith("{'6466b3b0256e'}\n{'6466b3b0256e', '9e9203c5c897'}\n")
 
+    def test_add_node_to_tier_twice(self):
+        # this id got added once by the setup method at top
+        assert 1 == len(self.net.get_nodes_in_tier(7))
+        # and we'll try it a second time
+        self.net.add_node_to_tier('940c6db3c798', 7)
+        assert 1 == len(self.net.get_nodes_in_tier(7))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -56,6 +56,7 @@ class Network:
             return self.nodes_dict[node_id].mesh_neighbours_set
 
     def get_nodes_in_tier(self, tier):
+        # todo: to test this, we'd need a nodes.json without gateways
         if 0 not in self.tiers_dict:
             return set()  # If not even tier 0 is filled we can skip this shit and go home.
 
