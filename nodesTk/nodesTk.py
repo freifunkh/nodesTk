@@ -66,7 +66,7 @@ class Network:
             tier_set = set()
             for node_id in self.tiers_dict[i]:  # Iterate over all nodes in the current tier.
                 # Add all neighbours of this node to the set for the next tier.
-                tier_set = tier_set.union(self.get_neighbours_of_node(node_id))
+                tier_set = tier_set.union(self.get_neighbours_of_node(node_id, vpn_neighbours=True))
             tier_set = tier_set.difference(self.tier_nodes_set)  # Remove all node_ids that are already part of a tier.
             self.tiers_dict[i+1] = tier_set
             self.tier_nodes_set = self.tier_nodes_set.union(tier_set)

@@ -19,6 +19,40 @@ class NodesTKTestCase(unittest.TestCase):
     def test_uplinkamount(self):
         assert 480 == len(self.net.get_nodes_in_tier(1))
 
+    def test_tier2amount(self):
+        # unvalidated value
+        assert 235 == len(self.net.get_nodes_in_tier(2))
+
+    def test_tier3amount(self):
+        # unvalidated value
+        assert 104 == len(self.net.get_nodes_in_tier(3))
+
+    def test_tier4amount(self):
+        # unvalidated value
+        assert 33 == len(self.net.get_nodes_in_tier(4))
+
+    def test_tier5amount(self):
+        # unvalidated value
+        assert 13 == len(self.net.get_nodes_in_tier(5))
+
+    def test_tier6amount(self):
+        # unvalidated value
+        assert 9 == len(self.net.get_nodes_in_tier(6))
+
+    def test_tier7amount(self):
+        # unvalidated value
+        assert 1 == len(self.net.get_nodes_in_tier(7))
+
+    def test_tier8amount(self):
+        # unvalidated value
+        assert 0 == len(self.net.get_nodes_in_tier(8))
+
+    def test_tier456amount_again(self):
+        # unvalidated value
+        assert 33 == len(self.net.get_nodes_in_tier(4))
+        assert 13 == len(self.net.get_nodes_in_tier(5))
+        assert 9 == len(self.net.get_nodes_in_tier(6))
+
     @staticmethod
     def test_addlink_naming():
         l = nodesTk.Link("62d703f9b069", "18a6f72b7c36", True, 1, False)
