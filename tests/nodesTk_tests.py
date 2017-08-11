@@ -89,5 +89,18 @@ class NodesTKTestCase(unittest.TestCase):
         assert 1 == len(self.net.get_nodes_in_tier(7))
 
 
+class NodesTKGatewaylessTestCase(unittest.TestCase):
+    def setUp(self):
+        self.net = nodesTk.generate_from_files("gatewayless_nodes.json", "graph.json")
+
+    def test_nodeamount(self):
+        assert 1139 == len(self.net.nodes_dict)
+
+    def test_gatewayamount(self):
+        assert 0 == len(self.net.get_nodes_in_tier(0))
+
+    def test_uplinkamount(self):
+        assert 0 == len(self.net.get_nodes_in_tier(1))
+
 if __name__ == '__main__':
     unittest.main()
