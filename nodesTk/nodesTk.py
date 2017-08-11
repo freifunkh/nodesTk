@@ -19,7 +19,7 @@ class Network:
     def add_node(self, node):
         node_id = node.get_node_id()
         self.nodes_dict[node_id] = node
-        if node.is_gateway():
+        if node.is_gateway:
             self.add_node_to_tier(node_id, 0)
 
     def get_node(self, node_id):
@@ -85,11 +85,13 @@ class Node:
     def get_node_id(self):
         return self.json['nodeinfo']['node_id']
 
+    @property
     def is_gateway(self):
         return self.json['flags']['gateway']
 
+    @property
     def is_online(self):
-            return self.json['flags']['online']
+        return self.json['flags']['online']
 
 
 class Link:
