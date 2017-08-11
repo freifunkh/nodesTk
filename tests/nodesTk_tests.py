@@ -78,7 +78,8 @@ class NodesTKTestCase(unittest.TestCase):
         sys.stdout = captured_output  # redirect stdout
         nodesTk.main("nodes.json", "graph.json")
         sys.stdout = sys.__stdout__  # reset redirect
-        assert captured_output.getvalue().startswith("{'6466b3b0256e'}\n{'6466b3b0256e', '9e9203c5c897'}\n")
+        assert (captured_output.getvalue().startswith("{'6466b3b0256e'}\n{'6466b3b0256e', '9e9203c5c897'}\n") or
+                captured_output.getvalue().startswith("{'6466b3b0256e'}\n{'9e9203c5c897', '6466b3b0256e'}\n"))
 
     def test_add_node_to_tier_twice(self):
         # this id got added once by the setup method at top
