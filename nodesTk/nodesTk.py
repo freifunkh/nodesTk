@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import re
 
 
 class Network:
@@ -101,6 +102,10 @@ class Version:
     @property
     def major(self):
         return self.version_string.split(".")[0]
+
+    @property
+    def minor(self):
+        return re.findall(r"\.(\d*)", self.version_string)[0]
 
 
 class Link:
