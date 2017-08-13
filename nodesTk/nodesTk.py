@@ -104,23 +104,40 @@ class Node:
 
 
 class Version:
+    """
+    Represent a gluon-firmware version.
+
+    This one should make it easier to compare and represent different versions of the gluon firmware.
+    Later, it may be possible to even match features of different versions.
+
+    """
+
     def __init__(self, version_string):
         self.version_string = version_string
 
     @property
     def major(self):
+        """Return the major-part of the version."""
         return self.version_string.split(".")[0]
 
     @property
     def minor(self):
+        """Return the minor-part of the version."""
         return re.findall(r"\.(\d*)", self.version_string)[0]
 
     @property
     def build(self):
+        """Return the build-character(s) of the version."""
         return re.findall(r"([a-zA-Z]*)-", self.version_string)[0]
 
     @property
     def builddate(self):
+        """
+        Return the builddate of the version.
+
+        Returns a datetime.datetime.date object, so the precision is limited to days.
+
+        """
         return datetime.datetime.strptime(self.version_string[-8:], "%Y%m%d").date()
 
 
