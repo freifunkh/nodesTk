@@ -101,6 +101,18 @@ class NodesTKTestCase(unittest.TestCase):
         version_str = "0.14f-20170411"
         assert version_str == nodesTk.Version(version_str).version_string
 
+    @staticmethod
+    def test_major():
+        assert "0" == nodesTk.Version("0.14f-20170411").major
+
+    @staticmethod
+    def test_minor():
+        assert "14" == nodesTk.Version("0.14f-20170411").minor
+
+    @staticmethod
+    def test_build():
+        assert "f" == nodesTk.Version("0.14f-20170411").build
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
