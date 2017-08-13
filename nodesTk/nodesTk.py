@@ -95,6 +95,10 @@ class Node:
     def is_online(self):
         return self.json['flags']['online']
 
+    @property
+    def version(self):
+        return Version(self.json['nodeinfo']['software']['firmware']['release'])
+
 
 class Version:
     def __init__(self, version_string):
