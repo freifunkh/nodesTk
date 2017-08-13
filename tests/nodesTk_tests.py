@@ -113,6 +113,10 @@ class NodesTKTestCase(unittest.TestCase):
     def test_build():
         assert "f" == nodesTk.Version("0.14f-20170411").build
 
+    @staticmethod
+    def test_builddate():
+        assert "2017-04-11" == str(nodesTk.Version("0.14f-20170411").builddate)
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
