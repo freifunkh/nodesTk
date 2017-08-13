@@ -96,7 +96,7 @@ class Node:
 
 class Version:
     def __init__(self, version_string):
-        pass
+        self.version_string = version_string
 
 
 class Link:
