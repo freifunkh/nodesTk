@@ -4,6 +4,7 @@ import unittest
 import sys
 from io import StringIO
 import nodesTk
+import datetime
 
 
 class NodesTKTestCase(unittest.TestCase):
@@ -87,6 +88,43 @@ class NodesTKTestCase(unittest.TestCase):
         # and we'll try it a second time
         self.net.add_node_to_tier('940c6db3c798', 7)
         assert 1 == len(self.net.get_nodes_in_tier(7))
+
+    @staticmethod
+    def test_version():
+        assert hasattr(nodesTk, 'Version')
+
+    @staticmethod
+    def test_version_init():
+        assert hasattr(nodesTk.Version, '__init__') and nodesTk.Version("0.14f-20170411")
+
+    @staticmethod
+    def test_version_string():
+        version_str = "0.14f-20170411"
+        assert version_str == nodesTk.Version(version_str).version_string
+
+    @staticmethod
+    def test_major():
+        assert "0" == nodesTk.Version("0.14f-20170411").major
+
+    @staticmethod
+    def test_minor():
+        assert "14" == nodesTk.Version("0.14f-20170411").minor
+
+    @staticmethod
+    def test_build():
+        assert "f" == nodesTk.Version("0.14f-20170411").build
+
+    @staticmethod
+    def test_builddate():
+        bd = nodesTk.Version("0.14f-20170411").builddate
+        assert "2017-04-11" == str(bd)
+        assert datetime.date == type(bd)
+
+    def test_version_of_node(self):
+        assert isinstance(self.net.get_node("60e327e719bc").version, nodesTk.Version)
+
+    def test_not_existing_version_of_node(self):
+        assert self.net.get_node("62d703f9b069").version is None
 
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):

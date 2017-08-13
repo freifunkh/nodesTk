@@ -2,6 +2,8 @@
 
 import argparse
 import json
+import re
+import datetime
 
 
 class Network:
@@ -91,6 +93,34 @@ class Node:
     @property
     def is_online(self):
         return self.json['flags']['online']
+
+    @property
+    def version(self):
+        try:
+            return Version(self.json['nodeinfo']['software']['firmware']['release'])
+        except KeyError:
+            pass
+
+
+class Version:
+    def __init__(self, version_string):
+        self.version_string = version_string
+
+    @property
+    def major(self):
+        return self.version_string.split(".")[0]
+
+    @property
+    def minor(self):
+        return re.findall(r"\.(\d*)", self.version_string)[0]
+
+    @property
+    def build(self):
+        return re.findall(r"([a-zA-Z]*)-", self.version_string)[0]
+
+    @property
+    def builddate(self):
+        return datetime.datetime.strptime(self.version_string[-8:], "%Y%m%d").date()
 
 
 class Link:
