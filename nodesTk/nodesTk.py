@@ -107,6 +107,10 @@ class Version:
     def minor(self):
         return re.findall(r"\.(\d*)", self.version_string)[0]
 
+    @property
+    def build(self):
+        return re.findall(r"([a-zA-Z]*)-", self.version_string)[0]
+
 
 class Link:
     def __init__(self, source, target, vpn, tq, bidirect):
