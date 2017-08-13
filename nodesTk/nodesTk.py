@@ -94,6 +94,10 @@ class Node:
         return self.json['flags']['online']
 
 
+class Version:
+    pass
+
+
 class Link:
     def __init__(self, source, target, vpn, tq, bidirect):
         self.source = source
