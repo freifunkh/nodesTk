@@ -98,6 +98,10 @@ class Version:
     def __init__(self, version_string):
         self.version_string = version_string
 
+    @property
+    def major(self):
+        return self.version_string.split(".")[0]
+
 
 class Link:
     def __init__(self, source, target, vpn, tq, bidirect):
