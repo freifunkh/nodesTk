@@ -5,6 +5,7 @@ import json
 import re
 import datetime
 
+
 class Network:
     def __init__(self):
         self.nodes_dict = dict()  # node_id as key and Node obj as value
