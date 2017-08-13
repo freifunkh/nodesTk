@@ -97,7 +97,10 @@ class Node:
 
     @property
     def version(self):
-        return Version(self.json['nodeinfo']['software']['firmware']['release'])
+        try:
+            return Version(self.json['nodeinfo']['software']['firmware']['release'])
+        except KeyError:
+            pass
 
 
 class Version:
