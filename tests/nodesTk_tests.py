@@ -92,6 +92,10 @@ class NodesTKTestCase(unittest.TestCase):
     def test_version():
         assert hasattr(nodesTk, 'Version')
 
+    @staticmethod
+    def test_version_init():
+        assert hasattr(nodesTk.Version, '__init__') and nodesTk.Version("0.14f-20170411")
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
