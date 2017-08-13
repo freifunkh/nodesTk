@@ -116,7 +116,6 @@ class Version:
     def builddate(self):
         return datetime.datetime.strptime(self.version_string[-8:], "%Y%m%d").date()
 
-
 class Link:
     def __init__(self, source, target, vpn, tq, bidirect):
         self.source = source
