@@ -88,6 +88,10 @@ class NodesTKTestCase(unittest.TestCase):
         self.net.add_node_to_tier('940c6db3c798', 7)
         assert 1 == len(self.net.get_nodes_in_tier(7))
 
+    @staticmethod
+    def test_version():
+        assert hasattr(nodesTk, 'Version')
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
