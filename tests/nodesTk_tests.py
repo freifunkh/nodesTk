@@ -126,6 +126,9 @@ class NodesTKTestCase(unittest.TestCase):
     def test_not_existing_version_of_node(self):
         assert self.net.get_node("62d703f9b069").version is None
 
+    def test_number_of_meshes(self):
+        assert len(self.net.get_meshes()) <= len(self.net.get_nodes_in_tier(1))
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):

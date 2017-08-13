@@ -56,6 +56,25 @@ class Network:
         else:
             return self.nodes_dict[node_id].mesh_neighbours_set
 
+    def get_mesh_of_node(self, node_id):
+        mesh_nodes_set = {node_id}
+        last_len = 0
+        # while mesh_nodes_set is growing...
+        while last_len != len(mesh_nodes_set):
+            last_len = len(mesh_nodes_set)
+            for mesh_node in mesh_nodes_set:
+                mesh_nodes_set = mesh_nodes_set.union(self.get_neighbours_of_node(mesh_node, vpn_neighbours=False))
+        return mesh_nodes_set
+
+    def get_meshes(self):
+        meshes_set = set()
+        for node_id in self.nodes_dict:
+            mesh_nodes_set = self.get_mesh_of_node(node_id)
+            mesh_str = '-'.join(sorted(list(mesh_nodes_set)))
+            #meshes_set.add(frozenset(mesh_nodes_set))
+            meshes_set.add(mesh_str)
+        return meshes_set
+
     def get_nodes_in_tier(self, tier):
         if 0 not in self.tiers_dict:
             return set()  # If not even tier 0 is filled we can skip this shit and go home.
@@ -161,8 +180,13 @@ def generate_from_files(nodes_json_path, graph_json_path):
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
 
-    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
-    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
+#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
+#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
+
+    for mesh in sorted(net.get_meshes()):
+        print(mesh)
+    print(len(net.get_meshes()))
+    print(len(net.get_nodes_in_tier(1)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
