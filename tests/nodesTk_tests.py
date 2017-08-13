@@ -123,6 +123,9 @@ class NodesTKTestCase(unittest.TestCase):
     def test_version_of_node(self):
         assert isinstance(self.net.get_node("60e327e719bc").version, nodesTk.Version)
 
+    def test_not_existing_version_of_node(self):
+        assert self.net.get_node("62d703f9b069").version is None
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
