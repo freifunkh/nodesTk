@@ -4,6 +4,7 @@ import unittest
 import sys
 from io import StringIO
 import nodesTk
+import datetime
 
 
 class NodesTKTestCase(unittest.TestCase):
@@ -115,7 +116,9 @@ class NodesTKTestCase(unittest.TestCase):
 
     @staticmethod
     def test_builddate():
-        assert "2017-04-11" == str(nodesTk.Version("0.14f-20170411").builddate)
+        bd = nodesTk.Version("0.14f-20170411").builddate
+        assert "2017-04-11" == str(bd)
+        assert datetime.date == type(bd)
 
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):

@@ -3,7 +3,7 @@
 import argparse
 import json
 import re
-
+import datetime
 
 class Network:
     def __init__(self):
@@ -110,6 +110,10 @@ class Version:
     @property
     def build(self):
         return re.findall(r"([a-zA-Z]*)-", self.version_string)[0]
+
+    @property
+    def builddate(self):
+        return datetime.datetime.strptime(self.version_string[-8:], "%Y%m%d").date()
 
 
 class Link:
