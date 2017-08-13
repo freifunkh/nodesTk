@@ -120,6 +120,9 @@ class NodesTKTestCase(unittest.TestCase):
         assert "2017-04-11" == str(bd)
         assert datetime.date == type(bd)
 
+    def test_version_of_node(self):
+        assert isinstance(self.net.get_node("60e327e719bc").version, nodesTk.Version)
+
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
     def setUp(self):
