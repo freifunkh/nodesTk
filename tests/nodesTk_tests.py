@@ -7,6 +7,19 @@ import nodesTk
 import datetime
 
 
+def validate_get_mesh_of_node(self, node_id):
+    done = []
+    todo = [node_id]
+    for upcoming_id in todo:
+        if upcoming_id not in done:
+            done.append(upcoming_id)
+            neighbours = self.get_neighbours_of_node(upcoming_id)
+            for each_neighbour in neighbours:
+                if each_neighbour not in done:
+                    todo.append(each_neighbour)
+    return done
+
+
 class NodesTKTestCase(unittest.TestCase):
     def setUp(self):
         self.net = nodesTk.generate_from_files("nodes.json", "graph.json")
@@ -127,7 +140,20 @@ class NodesTKTestCase(unittest.TestCase):
         assert self.net.get_node("62d703f9b069").version is None
 
     def test_number_of_meshes(self):
-        assert len(self.net.get_meshes()) <= len(self.net.get_nodes_in_tier(1))
+        assert len(self.net.get_online_meshes()) <= len(self.net.get_nodes_in_tier(1))
+
+    def test_meshnodes(self):
+        res = nodesTk.Network.get_mesh_of_node(self.net, "14cc20704b0e")
+        assert 6 == len(res)
+        assert {'14cc20704b0e', 'e894f6519000', 'e894f641b492',
+                'f4f26d4a24fe', '10feedf14cde', 'ec086bc987c4'}.issubset(res)
+
+    def test_validate_meshnodes(self):
+        assert nodesTk.Network.get_mesh_of_node(self.net, "14cc20704b0e")\
+               == set(validate_get_mesh_of_node(self.net, "14cc20704b0e"))
+
+    def test_number_of_online_meshes(self):
+        assert 477 == len(self.net.get_online_meshes())
 
 
 class NodesTKGatewaylessTestCase(unittest.TestCase):
