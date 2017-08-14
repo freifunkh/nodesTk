@@ -140,6 +140,8 @@ class NodesTKTestCase(unittest.TestCase):
         assert self.net.get_node("62d703f9b069").version is None
 
     def test_number_of_meshes(self):
+        # Fixme: actually the test passes, but with 477 being lesser than 480.
+        # The result is such a close run, that there must still be an error in our equation.
         assert len(self.net.get_online_meshes()) <= len(self.net.get_nodes_in_tier(1))
 
     def test_meshnodes(self):
