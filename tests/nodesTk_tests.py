@@ -86,6 +86,10 @@ class NodesTKTestCase(unittest.TestCase):
     def test_node_online(self):
         assert self.net.get_node("62d703f9b069").is_online
 
+    def test_node_ip(self):
+        """Test the ipv6 adress of a node, that should be reachable from the client net"""
+        assert 'fdca:ffee:8:0:a2f3:c1ff:fe12:e932' == self.net.get_node("a0f3c112e932").ipv6
+
     @staticmethod
     def test_main():
         captured_output = StringIO()

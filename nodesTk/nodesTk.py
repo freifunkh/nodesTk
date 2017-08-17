@@ -119,6 +119,11 @@ class Node:
         except KeyError:
             pass
 
+    @property
+    def ipv6(self):
+        """Return the ipv6 under which the device is reachable from the client network."""
+        return self.json['nodeinfo']['network']['addresses'][0]
+
 
 class Version:
     """
