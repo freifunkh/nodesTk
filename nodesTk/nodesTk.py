@@ -19,10 +19,9 @@ class Network:
         self.links_dict["-".join(l)] = newlink  # now with 'Streckenstrich'(tm)
 
     def add_node(self, node):
-        node_id = node.get_node_id()
-        self.nodes_dict[node_id] = node
+        self.nodes_dict[node.node_id] = node
         if node.is_gateway:
-            self.add_node_to_tier(node_id, 0)
+            self.add_node_to_tier(node.node_id, 0)
 
     def get_node(self, node_id):
         return self.nodes_dict[node_id]
@@ -57,6 +56,34 @@ class Network:
         else:
             return self.nodes_dict[node_id].mesh_neighbours_set
 
+    def get_mesh_of_node(self, node_id):
+        mesh_nodes_set = {node_id}
+        last_len = 0
+        # while mesh_nodes_set is growing...
+        while last_len != len(mesh_nodes_set):
+            last_len = len(mesh_nodes_set)
+            for mesh_node in mesh_nodes_set:
+                mesh_nodes_set = mesh_nodes_set.union(self.get_neighbours_of_node(mesh_node, vpn_neighbours=False))
+        return mesh_nodes_set
+
+    def get_meshes(self):
+        meshes_set = set()
+        for node_id in self.nodes_dict:
+            mesh_nodes_set = self.get_mesh_of_node(node_id)
+            mesh_str = '-'.join(sorted(list(mesh_nodes_set)))
+            #meshes_set.add(frozenset(mesh_nodes_set))
+            meshes_set.add(mesh_str)
+        return meshes_set
+
+    def get_online_meshes(self):
+        meshes_set = set()
+        for node_id in self.nodes_dict:
+            if self.get_node(node_id).is_online:
+                mesh_nodes_set = self.get_mesh_of_node(node_id)
+                mesh_str = '-'.join(sorted(list(mesh_nodes_set)))
+                meshes_set.add(mesh_str)
+        return meshes_set
+
     def get_nodes_in_tier(self, tier):
         if 0 not in self.tiers_dict:
             return set()  # If not even tier 0 is filled we can skip this shit and go home.
@@ -69,7 +96,8 @@ class Network:
             for node_id in self.tiers_dict[i]:  # Iterate over all nodes in the current tier.
                 # Add all neighbours of this node to the set for the next tier.
                 tier_set = tier_set.union(self.get_neighbours_of_node(node_id, vpn_neighbours=True))
-            tier_set = tier_set.difference(self.tier_nodes_set)  # Remove all node_ids that are already part of a tier.
+            # Remove all node_ids that are already part of a tier.
+            tier_set = tier_set.difference(self.tier_nodes_set)
             self.tiers_dict[i+1] = tier_set
             self.tier_nodes_set = self.tier_nodes_set.union(tier_set)
 
@@ -82,9 +110,8 @@ class Node:
         self.mesh_neighbours_set = None
         self.vpn_neighbours_set = None
 
-    # fixme properties are more pythonic than getter
-    # https://stackoverflow.com/questions/6618002/python-property-versus-getters-and-setters
-    def get_node_id(self):
+    @property
+    def node_id(self):
         return self.json['nodeinfo']['node_id']
 
     @property
@@ -179,8 +206,13 @@ def generate_from_files(nodes_json_path, graph_json_path):
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
 
-    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
-    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
+#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
+#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
+
+    for mesh in sorted(net.get_meshes()):
+        print(mesh)
+    print(len(net.get_meshes()))
+    print(len(net.get_nodes_in_tier(1)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

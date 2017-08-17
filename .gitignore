@@ -3,6 +3,7 @@
 !tests/nodes.json
 !tests/graph.json
 !tests/gatewayless_nodes.json
+test.sh
 
 ### Python template
 # Byte-compiled / optimized / DLL files
