@@ -205,14 +205,8 @@ def generate_from_files(nodes_json_path, graph_json_path):
 
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
-
-#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
-#    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
-
-    for mesh in sorted(net.get_meshes()):
-        print(mesh)
-    print(len(net.get_meshes()))
-    print(len(net.get_nodes_in_tier(1)))
+    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
+    print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
