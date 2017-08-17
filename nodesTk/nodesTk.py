@@ -69,15 +69,6 @@ class Network:
     def get_meshes(self):
         meshes_set = set()
         for node_id in self.nodes_dict:
-            mesh_nodes_set = self.get_mesh_of_node(node_id)
-            mesh_str = '-'.join(sorted(list(mesh_nodes_set)))
-            #meshes_set.add(frozenset(mesh_nodes_set))
-            meshes_set.add(mesh_str)
-        return meshes_set
-
-    def get_online_meshes(self):
-        meshes_set = set()
-        for node_id in self.nodes_dict:
             if self.get_node(node_id).is_online:
                 mesh_nodes_set = self.get_mesh_of_node(node_id)
                 mesh_str = '-'.join(sorted(list(mesh_nodes_set)))
