@@ -108,6 +108,7 @@ class NodesTKTestCase(unittest.TestCase):
     def test_not_existing_version_of_node(self):
         assert self.net.get_node("62d703f9b069").version is None
 
+    @unittest.skip("this one lasts way too long")
     def test_number_of_meshes(self):
         # Fixme: actually the test passes, but with 477 being lesser than 480.
         # The result is such a close run, that there must still be an error in our equation.
@@ -123,6 +124,7 @@ class NodesTKTestCase(unittest.TestCase):
         assert nodesTk.Network.get_mesh_of_node(self.net, "14cc20704b0e")\
                == set(validate_get_mesh_of_node(self.net, "14cc20704b0e"))
 
+    @unittest.skip("this one lasts way too long")
     def test_number_of_online_meshes(self):
         assert 477 == len(self.net.get_meshes())
 
