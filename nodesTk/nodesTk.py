@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import datetime
+from typing import Union
 
 
 class Network:
@@ -124,6 +125,16 @@ class Node:
     def ipv6(self):
         """Return the ipv6 under which the device is reachable from the client network."""
         return self.json['nodeinfo']['network']['addresses'][0]
+
+    @property
+    def location(self) -> Union[tuple, None]:
+        """Return a tupel of latitude and longitude, if present."""
+        try:
+            buffer = self.json['nodeinfo']['location']
+            coordinate = (buffer['latitude'], buffer['longitude'])
+            return coordinate
+        except KeyError:
+            pass
 
 
 class Version:
