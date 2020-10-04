@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 import argparse
+import datetime
 import json
 import re
-import datetime
+import urllib.request
 from typing import Union
 
 
@@ -121,6 +122,14 @@ class Node:
             pass
 
     @property
+    def client_count(self):
+        return self.json["statistics"]["clients"]
+
+    @property
+    def hostname(self):
+        return self.json["nodeinfo"]["hostname"]
+
+    @property
     def ipv6(self):
         """Return the ipv6 under which the device is reachable from the client network."""
         return self.json['nodeinfo']['network']['addresses'][0]
@@ -187,32 +196,43 @@ class Link:
         return 1/self.tq
 
 
-def generate_from_files(nodes_json_path, graph_json_path):
+def generate_from_file_objects(nodes_json_file, graph_json_file):
     net = Network()
-    with open(nodes_json_path, 'r') as f:
-        nodes_json = json.load(f)
-        for node in nodes_json['nodes']:
-            node_obj = Node(node)
-            net.add_node(node_obj)
+    nodes_json = json.load(nodes_json_file)
+    for node in nodes_json['nodes']:
+        node_obj = Node(node)
+        net.add_node(node_obj)
 
-    with open(graph_json_path, 'r') as f:
-        graph_json = json.load(f)
-        node_id_list = []
-        for node in graph_json['batadv']['nodes']:
-            node_id_list.append(node['node_id'])
-        for link in graph_json['batadv']['links']:
-            net.add_link(Link(node_id_list[link['source']],
-                              node_id_list[link['target']],
-                              link['vpn'],
-                              link['tq'],
-                              link['bidirect']))
+    graph_json = json.load(graph_json_file)
+    node_id_list = []
+    for node in graph_json['batadv']['nodes']:
+        node_id_list.append(node['node_id'])
+    for link in graph_json['batadv']['links']:
+        net.add_link(Link(node_id_list[link['source']],
+                          node_id_list[link['target']],
+                          link['vpn'],
+                          link['tq'],
+                          link['bidirect']))
     return net
+
+
+def generate_from_files(nodes_json_path, graph_json_path):
+    with open(nodes_json_path, "r") as nodes_json:
+        with open(graph_json_path, "r") as graph_json:
+            return generate_from_file_objects(nodes_json, graph_json)
+
+
+def generate_from_urls(nodes_json_url, graph_json_url):
+    with urllib.request.urlopen(nodes_json_url) as nodes_json:
+        with urllib.request.urlopen(graph_json_url) as graph_json:
+            return generate_from_file_objects(nodes_json, graph_json)
 
 
 def main(nodes_json_path, graph_json_path):
     net = generate_from_files(nodes_json_path, graph_json_path)
     print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=False))
     print(net.get_neighbours_of_node("a0f3c112e932", vpn_neighbours=True))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
