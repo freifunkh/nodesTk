@@ -23,6 +23,7 @@ def validate_get_mesh_of_node(self, node_id):
 class NodesTKTestCase(unittest.TestCase):
     def setUp(self):
         self.net = nodesTk.generate_from_files("nodes.json", "graph.json")
+        self.net.vpn_only_nodes.add("ec086bc987c4")
 
     def test_nodeamount(self):
         assert 1139 == len(self.net.nodes_dict)
@@ -120,9 +121,14 @@ class NodesTKTestCase(unittest.TestCase):
 
     def test_meshnodes(self):
         res = nodesTk.Network.get_mesh_of_node(self.net, "14cc20704b0e")
-        assert 6 == len(res)
+        assert 5 == len(res)
         assert {'14cc20704b0e', 'e894f6519000', 'e894f641b492',
-                'f4f26d4a24fe', '10feedf14cde', 'ec086bc987c4'}.issubset(res)
+                'f4f26d4a24fe', '10feedf14cde'}.issubset(res)
+
+    def test_meshnodes_fake_meshes(self):
+        _, fakes = nodesTk.Network.get_mesh_of_node_find_fake_meshes(self.net, "14cc20704b0e")
+        fake_mesh_connection = frozenset(('e894f641b492', 'ec086bc987c4'))
+        assert fakes == set((fake_mesh_connection,))
 
     def test_validate_meshnodes(self):
         assert nodesTk.Network.get_mesh_of_node(self.net, "14cc20704b0e")\

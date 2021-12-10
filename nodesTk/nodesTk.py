@@ -15,10 +15,14 @@ class Network:
         self.tiers_dict = dict()  # tier number as key and set of node_id as value
         self.tier_nodes_set = set()  # a set of all node_id who already have a tier
 
+        # A set of node IDs that are known to be VPN only (e.g. supernodes).
+        # Use this if the VPN flags in your graph.json are known to be incorrect.
+        self.vpn_only_nodes = set()
+
     def add_link(self, newlink):
-        l = [newlink.source, newlink.target]
-        l.sort(key=str.lower)
-        self.links_dict["-".join(l)] = newlink  # now with 'Streckenstrich'(tm)
+        link = [newlink.source, newlink.target]
+        link.sort(key=str.lower)
+        self.links_dict["-".join(link)] = newlink  # now with 'Streckenstrich'(tm)
 
     def add_node(self, node):
         self.nodes_dict[node.node_id] = node
@@ -37,6 +41,10 @@ class Network:
         self.tier_nodes_set.add(node_id)
 
     def get_neighbours_of_node(self, node_id, vpn_neighbours=False):
+        return self.get_neighbours_of_node_find_fake_meshes(node_id, vpn_neighbours)[0]
+
+    def get_neighbours_of_node_find_fake_meshes(self, node_id, vpn_neighbours=False):
+        fake_mesh_connections = set()
         if not self.nodes_dict[node_id].mesh_neighbours_set or not self.nodes_dict[node_id].vpn_neighbours_set:
             self.nodes_dict[node_id].mesh_neighbours_set = set()
             self.nodes_dict[node_id].vpn_neighbours_set = set()
@@ -50,23 +58,36 @@ class Network:
                 if other_node_id:
                     if self.links_dict[link_id].vpn:
                         self.nodes_dict[node_id].vpn_neighbours_set.add(other_node_id)
+                    elif node_id in self.vpn_only_nodes or other_node_id in self.vpn_only_nodes:
+                        # This connection is marked as non-VPN but one of the nodes is a known VPN only host.
+                        # Therefore this must be a VPN connection.
+                        fake_mesh_connections.add(frozenset((node_id, other_node_id)))
+                        self.nodes_dict[node_id].vpn_neighbours_set.add(other_node_id)
                     else:
                         self.nodes_dict[node_id].mesh_neighbours_set.add(other_node_id)
 
         if vpn_neighbours:
-            return self.nodes_dict[node_id].mesh_neighbours_set.union(self.nodes_dict[node_id].vpn_neighbours_set)
+            result = self.nodes_dict[node_id].mesh_neighbours_set.union(self.nodes_dict[node_id].vpn_neighbours_set)
         else:
-            return self.nodes_dict[node_id].mesh_neighbours_set
+            result = self.nodes_dict[node_id].mesh_neighbours_set
+
+        return result, fake_mesh_connections
 
     def get_mesh_of_node(self, node_id):
+        return self.get_mesh_of_node_find_fake_meshes(node_id)[0]
+
+    def get_mesh_of_node_find_fake_meshes(self, node_id):
         mesh_nodes_set = {node_id}
+        fake_mesh_connections = set()
         last_len = 0
         # while mesh_nodes_set is growing...
         while last_len != len(mesh_nodes_set):
             last_len = len(mesh_nodes_set)
             for mesh_node in mesh_nodes_set:
-                mesh_nodes_set = mesh_nodes_set.union(self.get_neighbours_of_node(mesh_node, vpn_neighbours=False))
-        return mesh_nodes_set
+                neighbours, fakes = self.get_neighbours_of_node_find_fake_meshes(mesh_node, vpn_neighbours=False)
+                mesh_nodes_set = mesh_nodes_set.union(neighbours)
+                fake_mesh_connections = fake_mesh_connections.union(fakes)
+        return mesh_nodes_set, fake_mesh_connections
 
     def get_meshes(self):
         meshes_set = set()
